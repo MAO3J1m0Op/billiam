@@ -36,6 +36,37 @@ public class Brainfuck implements Runnable {
     }
     
     /**
+     * Parses a new shorthand sequence. A number preceding a character
+     * duplicates that character a given number of times, just like VIM.
+     * @param shorthand the sequence to convert to Brainfuck.
+     * @return a Brainfuck object representing a shorthand sequence.
+     */
+    public static Brainfuck parseNewShorthand (String shorthand) {
+        
+        String seq = "";
+        String numStr;
+        int num;
+        
+        for (int n = 0; n < shorthand.length(); ++n) {
+            
+            num = 1;
+            numStr = "";
+            
+            // Duplicates at numbers
+            while (shorthand.substring(n, n+1).matches("/\\d/")) {
+                numStr = numStr + shorthand.substring(n, n+1);
+            }
+            
+            // Adds the chars.
+            for (int o = 0; o < num; ++o) {
+                seq = seq + shorthand.charAt(n);
+            }
+        }
+        
+        return parseNew(seq);
+    }
+    
+    /**
      * Parses a String into Brainfuck code.
      * @param code the code to parse.
      * @return the Brainfuck object containing the parsed and now runnable code.
