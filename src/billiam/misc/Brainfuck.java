@@ -52,9 +52,26 @@ public class Brainfuck implements Runnable {
             num = 1;
             numStr = "";
             
-            // Duplicates at numbers
-            while (shorthand.substring(n, n+1).matches("/\\d/")) {
-                numStr = numStr + shorthand.substring(n, n+1);
+            // Duplicates symbol if numbers are present
+            while (true) {
+                if (shorthand.substring(n, n+1).matches("\\d")) {
+                    
+                    // Adds a digit to the num string.
+                    numStr = numStr + shorthand.substring(n, n+1);
+                    
+                    // Jumps to the next char.
+                    ++n;
+                } else {
+                    
+                    // Breaks loop if number is empty.
+                    if (numStr.equals("")) break;
+                                        
+                    // Converts the string to a number.
+                    num = Integer.parseInt(numStr);
+                    
+                    // Ends the loop
+                    break;
+                }
             }
             
             // Adds the chars.
@@ -62,7 +79,7 @@ public class Brainfuck implements Runnable {
                 seq = seq + shorthand.charAt(n);
             }
         }
-        
+         
         return parseNew(seq);
     }
     
