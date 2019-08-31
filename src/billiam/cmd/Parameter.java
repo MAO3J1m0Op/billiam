@@ -108,177 +108,198 @@ public abstract class Parameter {
     /**
      * Returns a parameter of type int. To convert from string,
      * Integer.parseInt() will be called when pass() is called.
-     * @param name the name of the created parameter.
-     * @return a parameter of type int.
      */
-    public static Parameter intType (String name) {
-        return new Parameter(name) {
+    public static class IntType extends Parameter {
+    
+        /**
+         * Creates a new parameter of type int.
+         * @param name the name of the created parameter.
+         */
+        public IntType (String name) {
+            super(name);
+        }
 
-            @Override
-            public int priority () { return 2; }
+        @Override
+        public int priority () { return 2; }
 
-            @Override
-            public boolean isType (String test) {
-                return test.matches("/\\d+/");
-            }
+        @Override
+        public boolean isType (String test) {
+            return test.matches("/\\d+/");
+        }
 
-            @Override
-            public Integer convert (String obj) {
-                return Integer.parseInt(obj);
-            }
+        @Override
+        public Integer convert (String obj) {
+            return Integer.parseInt(obj);
+        }
 
-            @Override
-            public Class classType () { return Integer.class; }
+        @Override
+        public Class classType () { return Integer.class; }
 
-            @Override
-            public String type () { return "int"; }
-        };
+        @Override
+        public String type () { return "int"; }
     }
 
     /**
-     * Returns a parameter of type String.
-     * @param name the name of the created parameter.
-     * @return a parameter of type String.
+     * A parameter of type String.
      */
-    public static Parameter strType (String name) {
-        return new Parameter(name) {
+    public static class StrType extends Parameter {
+        
+        /**
+         * Creates a new parameter of type String.
+         * @param name the name of the created parameter.
+         */
+        public StrType (String name) {
+            super(name);
+        }
 
-            @Override
-            public int priority () { return 0; }
+        @Override
+        public int priority () { return 0; }
 
-            @Override
-            public boolean isType (String test) {
-                return true;
-            }
+        @Override
+        public boolean isType (String test) {
+            return true;
+        }
 
-            @Override
-            public String convert (String obj) {
-                return obj;
-            }
+        @Override
+        public String convert (String obj) {
+            return obj;
+        }
 
-            @Override
-            public Class classType () { return String.class; }
+        @Override
+        public Class classType () { return String.class; }
 
-            @Override
-            public String type () { return "str"; }
-        };
+        @Override
+        public String type () { return "str"; }
     }
 
     /**
-     * Returns a parameter of type double. To convert from string,
-     * Double.parseDouble() will be called when pass() is called.
-     * @param name the name of the created parameter.
-     * @return a parameter of type double.
+     * A parameter of type double. To convert from string, Double.parseDouble()
+     * will be called when pass() is called.
      */
-    public static Parameter floatType (String name) {
-        return new Parameter(name) {
+    public static class FloatType extends Parameter {
+        
+        /**
+         * Creates a parameter of type double.
+         * @param name the name of the created parameter.
+         */
+        public FloatType(String name) {
+            super(name);
+        }
 
-            @Override
-            public int priority () { return 1; }
+        @Override
+        public int priority () { return 1; }
 
-            @Override
-            public boolean isType (String test) {
-                return test.matches("/\\d+(\\.\\d+)?/");
-            }
+        @Override
+        public boolean isType (String test) {
+            return test.matches("/\\d+(\\.\\d+)?/");
+        }
 
-            @Override
-            public Double convert (String obj) {
-                return Double.parseDouble(obj);
-            }
+        @Override
+        public Double convert (String obj) {
+            return Double.parseDouble(obj);
+        }
 
-            @Override
-            public Class classType () { return Double.class; }
+        @Override
+        public Class classType () { return Double.class; }
 
-            @Override
-            public String type () { return "float"; }
-        };
+        @Override
+        public String type () { return "float"; }
     }
 
     /**
      * Returns a parameter of type switch. A switch is a keyword that
      * deviates a same keyword into different functions. For example, 
-     * given a command "scoreboard" could have 2 functions: objects and
+     * given a command "scoreboard" could have 2 functions: objectives and
      * players.
-     * @param keyword the keyword that represents the official type.
-     * @return a parameter of type switch.
      */
-    public static Parameter switchType (String keyword) {
-        return new Parameter(keyword) {
+    public static class SwitchType extends Parameter {
+        
+        /**
+         * Creates a parameter of type Switch.
+         * @param keyword the keyword that represents the official type.
+         */
+        public SwitchType (String keyword) {
+            super(keyword);
+        }
 
-            @Override
-            public int priority () { return 3; }
+        @Override
+        public int priority () { return 3; }
 
-            @Override
-            public boolean isType (String test) {
-                return test.equals(type());
-            }
+        @Override
+        public boolean isType (String test) {
+            return test.equals(type());
+        }
 
-            @Override
-            public String convert (String obj) {
-                return obj;
-            }
+        @Override
+        public String convert (String obj) {
+            return obj;
+        }
 
-            @Override
-            public Class classType () { return String.class; }
+        @Override
+        public Class classType () { return String.class; }
 
-            @Override
-            public String type () { return "switch<" + name + ">"; }
+        @Override
+        public String type () { return "switch<" + name + ">"; }
 
-            @Override
-            public String toString () {
-                return name;
-            }
-        };
+        @Override
+        public String toString () {
+            return name;
+        }
     }
 
     /**
-     * Returns a parameter of type array. An array is parsed using multiple
+     * A parameter of type array. An array is parsed using multiple
      * arguments until a designated end word is found. Once this end word
      * is found, the array is compiled and made into one argument with all
      * the previous arguments.
-     * @param endWord the word that must be used to mark the end of the
-     * array.
-     * @param subtype the expected Parameter type of the created array.
-     * @return a parameter of type array.
      */
-    public static Parameter arrayType (String endWord, Parameter subtype) {
-        return new Parameter(endWord) {
+    public static class ArrayType extends Parameter {
+            
+        /**
+         * Creates a new parameter of type array.
+         * @param endWord the word that must be used to mark the end of the
+         * array.
+         * @param subType the expected Parameter type of the created array.
+         */
+        public ArrayType (String endWord, Parameter subType) {
+            super(endWord);
+            this.subType = subType;
+        }
 
-            public final Parameter subType = subtype;
+        public final Parameter subType;
 
-            @Override
-            public int priority () { return 4; }
+        @Override
+        public int priority () { return 4; }
 
-            /**
-             * This method should not be called, as CommandLine already
-             * knows how to check for arrays.
-             * @param test the test string.
-             * @return false.
-             */
-            @Override
-            public boolean isType (String test) {
-                return false;
-            }
+        /**
+         * This method should not be called, as CommandLine already
+         * knows how to check for arrays.
+         * @param test the test string.
+         * @return false.
+         */
+        @Override
+        public boolean isType (String test) {
+            return false;
+        }
 
-            @Override
-            public Double convert (String obj) {
-                return Double.parseDouble(obj);
-            }
+        @Override
+        public Double convert (String obj) {
+            return Double.parseDouble(obj);
+        }
 
-            @Override
-            public Class classType () { 
-                return java.lang.reflect.Array.class;
-            }
+        @Override
+        public Class classType () { 
+            return java.lang.reflect.Array.class;
+        }
 
-            @Override
-            public String type () { 
-                return "array<" + subType.type() + ">";
-            }
+        @Override
+        public String type () { 
+            return "array<" + subType.type() + ">";
+        }
 
-            @Override
-            public String toString () {
-                return subType.toString() + "... " + name;
-            }
-        };
+        @Override
+        public String toString () {
+            return subType.toString() + "... " + name;
+        }
     }
 }
