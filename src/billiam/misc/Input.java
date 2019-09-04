@@ -18,18 +18,21 @@ public final class Input implements java.io.Serializable {
      */
     public String booleanPrompt = "(y/n) > ";
     
+    public java.io.PrintStream out = System.out;
+    public java.io.InputStream in = System.in;
+    
     /**
      * Gets a boolean from the user using a y/n format.
      * @return true if the user answered yes, and false if they answered no.
      */
     public final boolean getBoolean () {
         
-        Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(in);
         
         // Continues to try to get console input until it succeeds.
         while (true) {
             // Prompt
-            System.out.print(intPrompt);
+            out.print(intPrompt);
             
             String value = input.next();
                 
@@ -38,7 +41,7 @@ public final class Input implements java.io.Serializable {
             if (value.equals("n")) return false;
             
             // If not valid, print error message.
-            System.out.println("[ INV ] Please enter either \"y\" or \"n\".");
+            out.println("[ INV ] Please enter either \"y\" or \"n\".");
         }
     }
     
@@ -53,19 +56,19 @@ public final class Input implements java.io.Serializable {
      */
     public final int getInt () {
         
-        Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(in);
         
         // Continues to try to get console input until it succeeds.
         while (true) {
             try {
                 // Prompt
-                System.out.print(intPrompt);
+                out.print(intPrompt);
                 
                 // Get input and return it if all ends well.
                 return Integer.parseInt(input.next());
                 
             } catch (NumberFormatException e) {
-                System.out.println("[ INV ] Please enter a valid integer.");
+                out.println("[ INV ] Please enter a valid integer.");
             }
         }
     }
@@ -85,9 +88,9 @@ public final class Input implements java.io.Serializable {
             int value = getInt();
             
             // Checks if it is between min and max.
-            if (value > max) System.out.println("[ INV ] Value entered is too "
+            if (value > max) out.println("[ INV ] Value entered is too "
                     + "large. Must be at most " + max + ".");
-            else if (value > max) System.out.println("[ INV ] Value entered is "
+            else if (value > max) out.println("[ INV ] Value entered is "
                     + "too small. Must be at least " + min + ".");
         
             // If it makes it through all the checks, return it.
@@ -107,9 +110,9 @@ public final class Input implements java.io.Serializable {
      */
     public final String getString () {
         
-        Scanner input = new Scanner(System.in).useDelimiter("\\n");
+        Scanner input = new Scanner(in).useDelimiter("\\n");
         
-        System.out.print(stringPrompt);
+        out.print(stringPrompt);
         
         return input.next();
     }
@@ -124,9 +127,9 @@ public final class Input implements java.io.Serializable {
      * Awaits an enter press.
      */
     public final void burn () {
-        Scanner input = new Scanner(System.in).useDelimiter("\\n");
+        Scanner input = new Scanner(in).useDelimiter("\\n");
         
-        System.out.print(burnPrompt);
+        out.print(burnPrompt);
         
         input.next();
     }
