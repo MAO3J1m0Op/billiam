@@ -14,7 +14,7 @@ public final class Dialogue {
      * Prints a prompt that is created based on the specified options.
      * @param options the options that are provided in this prompt.
      */
-    public static void prompt (String[] options) {
+    public static void prompt (String... options) {
         for (int n = 0; n < options.length; ++n) {
             System.out.println("[" + (n + 1) + "] " + options[n]);
         }
@@ -24,7 +24,7 @@ public final class Dialogue {
      * Prints a random one of the given lines via the String array.
      * @param options the String array that the method picks from.
      */
-    public static void randomResponse (String[] options) {
+    public static void randomResponse (String... options) {
         
         int choice = new java.util.Random().nextInt(options.length);
         
