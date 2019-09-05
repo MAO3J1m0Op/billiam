@@ -1,7 +1,6 @@
 /*
- * Oh boi. It's Final Boss.
- * Now it's in Java. Ain't that cool?
- * Maybe I'll finish it this time.
+ * Billiam Library is a collection of packages and classes
+ * created by Will Harris.
  */
 package billiam.games.dialogue;
 
