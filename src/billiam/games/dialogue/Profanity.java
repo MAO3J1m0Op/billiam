@@ -2,7 +2,7 @@
  * Billiam Library is a collection of packages and classes
  * created by Will Harris.
  */
-package billiam.games.dialouge;
+package billiam.games.dialogue;
 
 /**
  * Protecting children (not programmers) from Big Naughty since 2019.

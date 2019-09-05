@@ -3,7 +3,7 @@
  * Now it's in Java. Ain't that cool?
  * Maybe I'll finish it this time.
  */
-package billiam.games.dialouge;
+package billiam.games.dialogue;
 
 /**
  * Stores static methods that allow me to be lazy when writing dialogue.

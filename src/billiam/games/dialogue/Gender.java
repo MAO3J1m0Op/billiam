@@ -3,7 +3,7 @@
  * Now it's in Java. Ain't that cool?
  * Maybe I'll finish it this time.
  */
-package billiam.games.dialouge;
+package billiam.games.dialogue;
 
 /**
  * Because it is 2019, this needs to be customizable.
