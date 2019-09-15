@@ -45,7 +45,7 @@ public class Command implements Runnable {
      */
     @Override
     public void run () {
-        java.util.ArrayList args = new java.util.ArrayList();
+        java.util.ArrayList<Object> args = new java.util.ArrayList<>();
         
         for (Parameter param : params) {
             args.add(param.getPassedValue());
