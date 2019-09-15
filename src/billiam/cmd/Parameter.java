@@ -4,8 +4,12 @@
  */
 package billiam.cmd;
 
+import java.util.ArrayList;
+import billiam.misc.Mutable;
+
 /**
- *
+ * Stores information about a type of a parameter, and can have an object passed
+ * to it.
  * @author willharris
  */
 public abstract class Parameter {
@@ -18,7 +22,7 @@ public abstract class Parameter {
     /**
      * When pass() is called, this value will be assigned to.
      */
-    private Object arg = null;
+    Object arg = null;
 
     /**
      * Gets the assigned value for this parameter. A value is assigned via
@@ -37,18 +41,20 @@ public abstract class Parameter {
 
     /**
      * Tests if the passed String is a valid literal of that type.
-     * @param test the passed String to test.
+     * @param command the passed String[] containing the argument to test.
+     * @param testIndex the index of the argument to test.
      * @return true if the passed String is a valid literal, otherwise
      * false.
      */
-    public abstract boolean isType(String test);
+    public abstract boolean isType(String[] command, Mutable<Integer> testIndex);
 
     /**
      * Converts a literal to an object.
-     * @param obj the literal to convert.
+     * @param command the String array containing the literal to convert.
+     * @param index the index of the literal to convert.
      * @return the converted object.
      */
-    public abstract Object convert(String obj);
+    public abstract Object convert(String[] command, Mutable<Integer> index);
 
     /**
      * Returns the actual type of the passed value as a class. This method
@@ -66,11 +72,13 @@ public abstract class Parameter {
     /**
      * Passes a value to this Parameter. This value will be stored until
      * pass() is called again.
-     * @param value the value to pass to this parameter.
+     * @param command the String array containing the argument to pass to this
+     * parameter.
+     * @param indexToPass the index of the argument to pass.
      */
-    public final void pass (String value) {
-        if (isType(value)) {
-            arg = convert(value);
+    public final void pass (String[] command, Mutable<Integer> indexToPass) {
+        if (isType(command, indexToPass)) {
+            arg = convert(command, indexToPass);
         } else throw new IllegalArgumentException("Argument passed does "
                 + "not match the required type of this Parameter.");
     }
@@ -123,13 +131,13 @@ public abstract class Parameter {
         public int priority () { return 2; }
 
         @Override
-        public boolean isType (String test) {
-            return test.matches("/\\d+/");
+        public boolean isType (String[] command, Mutable<Integer> test) {
+            return command[test.get()].matches("/\\d+/");
         }
 
         @Override
-        public Integer convert (String obj) {
-            return Integer.parseInt(obj);
+        public Integer convert (String[] command, Mutable<Integer> index) {
+            return Integer.parseInt(command[index.get()]);
         }
 
         @Override
@@ -156,13 +164,13 @@ public abstract class Parameter {
         public int priority () { return 0; }
 
         @Override
-        public boolean isType (String test) {
+        public boolean isType (String[] command, Mutable<Integer> test) {
             return true;
         }
 
         @Override
-        public String convert (String obj) {
-            return obj;
+        public String convert (String[] command, Mutable<Integer> obj) {
+            return command[obj.get()];
         }
 
         @Override
@@ -190,13 +198,13 @@ public abstract class Parameter {
         public int priority () { return 1; }
 
         @Override
-        public boolean isType (String test) {
-            return test.matches("/\\d+(\\.\\d+)?/");
+        public boolean isType (String[] command, Mutable<Integer> test) {
+            return command[test.get()].matches("/\\d+(\\.\\d+)?/");
         }
 
         @Override
-        public Double convert (String obj) {
-            return Double.parseDouble(obj);
+        public Double convert (String[] command, Mutable<Integer> obj) {
+            return Double.parseDouble(command[obj.get()]);
         }
 
         @Override
@@ -226,13 +234,13 @@ public abstract class Parameter {
         public int priority () { return 3; }
 
         @Override
-        public boolean isType (String test) {
-            return test.equals(type());
+        public boolean isType (String[] command, Mutable<Integer> test) {
+            return command[test.get()].equals(type());
         }
 
         @Override
-        public String convert (String obj) {
-            return obj;
+        public String convert (String[] command, Mutable<Integer> obj) {
+            return command[obj.get()];
         }
 
         @Override
@@ -271,29 +279,52 @@ public abstract class Parameter {
         @Override
         public int priority () { return 4; }
 
-        /**
-         * This method should not be called, as CommandLine already
-         * knows how to check for arrays.
-         * @param test the test string.
-         * @return false.
-         */
         @Override
-        public boolean isType (String test) {
+        public boolean isType (String[] command, Mutable<Integer> test) {
+            
+            for (int n = test.get(); n < command.length; ++n) {
+                
+                // If it matches the end word
+                if (command[n].equals(name)) return true;
+                
+                // Arg doesn't match subtype.
+                if (!(subType.isType(command, new Mutable<>(n)))) return false;
+            }
+            
+            // End of command before endword found.
             return false;
         }
 
         @Override
-        public Double convert (String obj) {
-            return Double.parseDouble(obj);
+        public ArrayList convert (String[] command, Mutable<Integer> startIndex)
+        {
+            // The value can be casted to the subtype later. Reflection is bad.
+            ArrayList value = new ArrayList();
+            
+            for (int n = startIndex.get(); n < command.length; ++n) {
+                
+                startIndex.set(n);
+                
+                // If it matches the end word
+                if (command[n].equals(name)) return value;
+                
+                // Arg doesn't match subtype.
+                value.add(subType.convert(command, startIndex));
+                
+                n = startIndex.get();
+            }
+            
+            throw new IllegalArgumentException("End of command found before "
+                    + "endword found.");
         }
 
         @Override
         public Class classType () { 
-            return java.lang.reflect.Array.class;
+            return ArrayList.class;
         }
 
         @Override
-        public String type () { 
+        public String type () {
             return "array<" + subType.type() + ">";
         }
 
