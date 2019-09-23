@@ -34,7 +34,7 @@ public final class Input implements java.io.Serializable {
             // Prompt
             out.print(intPrompt);
             
-            String value = input.nextLine();
+            String value = input.next();
                 
             // Returns the y/n if valid.
             if (value.equals("y")) return true;
@@ -60,19 +60,16 @@ public final class Input implements java.io.Serializable {
         
         // Continues to try to get console input until it succeeds.
         while (true) {
-            // Prompt
-            out.print(intPrompt);
-            
-            // Gets prompt
-            String value = input.nextLine();
-
-            // Catches any formatting errors
-            if (!value.matches("/\\d+/")) {
+            try {
+                // Prompt
+                out.print(intPrompt);
+                
+                // Get input and return it if all ends well.
+                return Integer.parseInt(input.next());
+                
+            } catch (NumberFormatException e) {
                 out.println("[ INV ] Please enter a valid integer.");
             }
-
-            // Get input and return it if all ends well.
-            return Integer.parseInt(value);
         }
     }
     
@@ -113,11 +110,11 @@ public final class Input implements java.io.Serializable {
      */
     public final String getString () {
         
-        Scanner input = new Scanner(in);
+        Scanner input = new Scanner(in).useDelimiter("\\n");
         
         out.print(stringPrompt);
         
-        return input.nextLine();
+        return input.next();
     }
     
     /**
@@ -130,11 +127,11 @@ public final class Input implements java.io.Serializable {
      * Awaits an enter press.
      */
     public final void burn () {
-        Scanner input = new Scanner(in);
+        Scanner input = new Scanner(in).useDelimiter("\\n");
         
         out.print(burnPrompt);
         
-        input.nextLine();
+        input.next();
     }
     
     public Input (String booleanPrompt, String intPrompt, String stringPrompt,
