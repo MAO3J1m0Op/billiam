@@ -8,7 +8,7 @@ package billiam.parsing;
  * Parses a String into a Parsable object.
  * @author willharris
  */
-public class Parser {
+public final class Parser {
     
     public final java.util.Collection<Parsable> parserObjs;
     
